@@ -1,0 +1,3 @@
+<appHome>
+  <home appName="captainsLog" appDesc="Booklet Home" appPng="captainsLog_logo.png" appHomeURL="&lt;%= httpRoot %&gt;/captainsLog/do?op=Home"/>
+</appHome>
