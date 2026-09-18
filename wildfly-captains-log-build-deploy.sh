@@ -24,7 +24,7 @@ rm -rf captainsLog
 groovy WildFlyBuilder
 
 cd Extender
-groovy BookletExtender
+groovy CaptainsLogExtender
 
 cd ../captainsLog
 mvn clean package -e wildfly:deploy
