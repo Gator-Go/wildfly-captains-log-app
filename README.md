@@ -1,58 +1,57 @@
-# WildFly Booklet App
+# WildFly Builder
 
-Prototype. Factory-generated Booklet app from wildfly-builder.
+Prototype software factory that generates WildFly / Java EE apps from a shared
+template, metadata, and Groovy extenders.
 
-Catalog: https://sw-builder.com/appstore/wildfly/apps/wildfly-captains-log-app.html
+Part of the SW-Builder factories for rapid Java EE / WildFly app development.
 
-Builder: https://github.com/Gator-Go/wildfly-builder
+Catalog: https://sw-builder.com/appstore/builders/apps/wildfly-builder.html
 
-Live demo: https://sw-builder.com/captainsLog/do?op=Home  
-Sign in with `guest` / `guest`.
+## What it does
 
-## Build (Unix)
+`template/` is a base WildFly application framework.
 
-Prerequisites: Git, Groovy, JDK, Maven, WildFly.
+`build/` holds reusable fragments declared in XML:
 
-Expected sibling directories:
+- `APP_APPS.xml` — application / module wiring
+- `APP_CODES.xml` — code fragments
+- `APP_EVENT_CODES.xml` — event handlers
+- `APP_FUNCS.xml` — functions
+- `APP_PROCS.xml` — procedures
 
-    ~/wildfly/wildfly-builder
-    ~/wildfly/wildfly-captains-log-app
+An app-specific extender selects and applies those fragments onto the template.
 
-```bash
-cd ~/wildfly/wildfly-captains-log-app
-git pull
-./wildfly-captains-log-build-deploy.sh
-```
+Think of a 3D printer: small pieces of code are fused onto the template to
+produce a deployable WildFly app.
+
 ## Layout
+
 ```text
-wildfly-captains-log-app/
-├── wildfly-captains-log-build-deploy.sh
-├── Extender/
-│   └── BookletExtender.groovy
-├── options/                      # app-specific metadata
-│   ├── APP_CODE_TYPES.xml
-│   ├── APP_ENUMS.xml
-│   ├── APP_EVENTS.xml
-│   ├── APP_HOME.xml
-│   ├── APP_NAMES.xml
-│   └── APP_TABLES.xml
-├── captainsLog.jpg
-├── captainsLog_logo.png
-├── cert.jpg
-├── SimpleBooklet.jrxml
-└── certTest.jrxml
+wildfly-builder/
+├── WildFlyBuilder.groovy    # factory entry point
+├── updateAppsList.groovy    # refreshes the known-apps list
+├── update_and_commit.sh     # overlay + commit helper
+├── build/
+│   ├── APP_APPS.xml
+│   ├── APP_CODES.xml
+│   ├── APP_EVENT_CODES.xml
+│   ├── APP_FUNCS.xml
+│   └── APP_PROCS.xml
+└── template/                # base WildFly project
 ```
-## Note:
-The template/ and build/ dirs appear after a build. They come from
-wildfly-builder.
+## How a build runs
+Build scripts live in each generated app repo, not in this builder.
+Example:
+```text
+~/wildfly/wildfly-booklet-app/wildfly-booklet-build-deploy.sh
+```
+## That script typically:
 
-WildflyBuilder.groovy is copied in from droid-builder at build time.
+1. Pulls this builder
 
-BookletExtender.groovy performs functions unique to the captainsLog app such as deploying 
-the captainsLog logo image.
+2. Overlays template/ and build/ onto the app
 
-The captainsLog/ dir appears after a build and is the build output where
-the new app is created.
+3. Runs update_and_commit.sh
 
-
-
+4. Runs WildFlyBuilder and an app-specific extender
+(e.g. BookletExtender)
